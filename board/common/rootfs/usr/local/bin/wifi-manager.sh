@@ -101,8 +101,11 @@ makeConnection() {
 ###################################
 
 MainMenu() {
-  if [[ ! -z $(rfkill -n -o TYPE,SOFT | grep wlan) ]]; then
-    if [[ ! -z $(rfkill -n -o TYPE,SOFT | grep wlan | grep -w unblocked) ]]; then
+  if rfkill -n -o TYPE,SOFT | grep -q wlan; then
+
+    if rfkill -n -o TYPE,SOFT | grep -w wlan | grep -q unblocked && \
+       nmcli -t -f WIFI g | grep -q enabled; then
+
       local Wifi_Stat="On"
       local Wifi_MStat="Off"
     else
