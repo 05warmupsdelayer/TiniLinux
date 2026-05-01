@@ -6,7 +6,6 @@ for OPT in "${OPTIONAL_MODES[@]}"; do
     case "$OPT" in
         nographic) MODE_DISPLAY="nographic" ;;
         gui)       MODE_DISPLAY="gui"       ;;
-        gui-gl)    MODE_DISPLAY="gui-gl"    ;;
         squashfs)  MODE_ROOT="squashfs"     ;;
         rootrw)    MODE_ROOT="rootrw"       ;;
         rootnfs)   MODE_ROOT="rootnfs"      ;;
@@ -27,7 +26,6 @@ QEMU_BASE=(
     -device virtio-net-device,netdev=eth0
     -device virtio-keyboard-pci
     -device virtio-mouse-pci
-    #-device virtio-sound-pci,audiodev=snd0 -audiodev pa,id=snd0
 )
 
 if [ "${MODE_BOOT:-}" = "efi" ]; then
@@ -54,13 +52,6 @@ case "$MODE_DISPLAY" in
         )
         ;;
     gui)
-        DISPLAY_APPEND+=" console=tty1 video=640x480 splash"
-        DISPLAY_EXTRA+=(
-            -device virtio-gpu-pci,xres=640,yres=480
-            -display gtk
-        )
-        ;;
-    gui-gl)
         DISPLAY_APPEND+=" console=tty1 video=640x480 splash"
         DISPLAY_EXTRA+=(
             -device virtio-gpu-gl-pci,xres=640,yres=480
