@@ -9,31 +9,37 @@ set -euo pipefail
 IMG="${1:-tinilinux-qemu_aarch64.img}"
 
 MNT_EFI="/mnt/vda1"
+MNT_ROOT="/mnt/vda2"
 
 echo "[+] Attaching loop device..."
 LOOP=$(sudo losetup --find --show -Pf "$IMG")
 echo "    -> $LOOP"
 
 EFI_DEV="${LOOP}p1"
+ROOT_DEV="${LOOP}p2"
 
 echo "[+] Creating mount points..."
-sudo mkdir -p "$MNT_EFI"
+sudo mkdir -p "$MNT_EFI" "$MNT_ROOT"
 
 echo "[+] Mounting partitions..."
 sudo mount "$EFI_DEV" "$MNT_EFI"
+if [ -e "$ROOT_DEV" ]; then
+    sudo mount "$ROOT_DEV" "$MNT_ROOT" || true
+fi
 
 echo "[+] Installing GRUB (ARM64 EFI)..."
 sudo grub-install \
   --target=arm64-efi \
   --efi-directory="$MNT_EFI" \
-  --boot-directory="$MNT_EFI" \
+  --boot-directory="$MNT_EFI/boot" \
   --removable \
   --no-nvram
 
 echo "[+] Writing grub.cfg..."
-sudo mkdir -p "$MNT_EFI/grub"
-sudo tee "$MNT_EFI/grub/grub.cfg" > /dev/null <<'EOF'
-set timeout=1
+sudo mkdir -p "$MNT_EFI/boot/grub"
+
+sudo tee "$MNT_EFI/boot/grub/grub.cfg" > /dev/null <<'EOF'
+set timeout=3
 set default=0
 
 menuentry "TiniLinux (aarch64)" {
@@ -47,6 +53,7 @@ sync
 
 echo "[+] Unmounting..."
 sudo umount "$MNT_EFI" || true
+sudo umount "$MNT_ROOT" || true
 
 echo "[+] Detaching loop device..."
 sudo losetup -d "$LOOP"
