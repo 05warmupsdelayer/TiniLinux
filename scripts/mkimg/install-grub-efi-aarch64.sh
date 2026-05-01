@@ -31,15 +31,14 @@ echo "[+] Installing GRUB (ARM64 EFI)..."
 sudo grub-install \
   --target=arm64-efi \
   --efi-directory="$MNT_EFI" \
-  --boot-directory="$MNT_EFI/boot" \
+  --boot-directory="$MNT_EFI" \
   --removable \
   --no-nvram
 
 echo "[+] Writing grub.cfg..."
-sudo mkdir -p "$MNT_EFI/boot/grub"
-
-sudo tee "$MNT_EFI/boot/grub/grub.cfg" > /dev/null <<'EOF'
-set timeout=3
+sudo mkdir -p "$MNT_EFI/grub"
+sudo tee "$MNT_EFI/grub/grub.cfg" > /dev/null <<'EOF'
+set timeout=1
 set default=0
 
 menuentry "TiniLinux (aarch64)" {
