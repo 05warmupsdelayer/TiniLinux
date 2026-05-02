@@ -1,3 +1,13 @@
+TiniLinux fork for Anbernic RG35XXSP
+
+- RG35XXSP dtb is default
+- RG35XXSP Lid Support
+- Fix for suspend lockup
+- Fix for Wi-Fi script not showing status properly on boot
+- Made simple-launcher main menu more simple
+
+------
+
 [![Build](https://github.com/haoict/TiniLinux/actions/workflows/build.yaml/badge.svg?branch=master)](https://github.com/haoict/TiniLinux/actions/workflows/build.yaml)
 
 # Tinilinux
