@@ -1,7 +1,7 @@
-TiniLinux fork for Anbernic RG35XXSP
+# TiniLinux fork for Anbernic RG35XXSP
 
-- RG35XXSP dtb is default
-- RG35XXSP lid Support
+- Set RG35XXSP dtb as the default
+- Added RG35XXSP lid sleep/wake support
 - Fix for suspend lockup
 - Fix for Wi-Fi script not showing status properly on boot
 - Made simple-launcher main menu more simple
